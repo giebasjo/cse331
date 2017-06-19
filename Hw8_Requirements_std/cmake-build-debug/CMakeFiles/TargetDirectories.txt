@@ -1,0 +1,3 @@
+/Users/GIBZ/331/Hw8_Requirements_std/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/GIBZ/331/Hw8_Requirements_std/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/GIBZ/331/Hw8_Requirements_std/cmake-build-debug/CMakeFiles/Hw8_Requirements_std.dir

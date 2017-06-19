@@ -1,0 +1,4 @@
+/Applications/CLion.app/Contents/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/GIBZ/331/hw7_requirements
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/GIBZ/331/hw7_requirements/cmake-build-debug

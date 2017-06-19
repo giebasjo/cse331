@@ -1,0 +1,805 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+#ifndef LIBRARY_LIBRARY_H
+#define LIBRARY_LIBRARY_H
+
+struct Book {
+
+  string isbn;
+  string title;
+  string author;
+
+  Book() = delete;
+  Book(string _isbn, string _title, string _author) : isbn(_isbn), title(_title), author(_author) {};
+
+  bool operator<(const Book &other) { return isbn < other.isbn; };
+  bool operator==(const Book &other) { return isbn == other.isbn; };
+  bool operator!=(const Book &other) { return isbn != other.isbn; };
+
+};
+
+class Library {
+
+  public:
+
+    Library();
+    void add(Book);
+    void check_in(Book);
+    Book *check_out(Book);
+    Book *search(Book);
+    long available_copies(Book);
+
+ private:
+
+    struct BookNode {
+
+      Book value;
+      BookNode *left;
+      BookNode *right;
+      size_t count = 1;
+      BookNode(Book b) : value(b), left(nullptr), right(nullptr) {};
+
+    };
+
+    BookNode *root;
+
+    void add(BookNode *&root_node, BookNode *&new_node) {
+
+      string added_isbn = (*new_node).value.isbn;
+      string root_isbn = (*root_node).value.isbn;
+
+      if ( added_isbn < root_isbn ) {
+
+        if ( root->left != nullptr ) {
+
+          add( new_node, root->left );
+
+        }
+
+        else {
+
+          root->left = new BookNode( new_node->value );
+
+        }
+
+      }
+
+      else if ( added_isbn >= root_isbn ) {
+
+        if ( root->right != nullptr ) {
+
+          add( new_node, root->right );
+
+        }
+
+        else {
+
+          root->right = new BookNode( new_node->value );
+
+        }
+
+      }
+
+    }
+
+    BookNode *search( Book bookObj, BookNode *root ) {
+
+      string bookObj_isbn = bookObj.isbn;
+
+      if ( root != nullptr ) {
+
+        if ( bookObj_isbn == (*root).value.isbn ) {
+
+          return root;
+
+        }
+
+        if ( bookObj_isbn < (*root).value.isbn ) {
+
+          return search( bookObj, (*root).left );
+
+        }
+
+        else {
+
+          return search( bookObj, (*root).right );
+
+        }
+
+      }
+
+      else {
+
+        return nullptr;
+
+      }
+
+    }
+
+    bool isEmpty() { return root == nullptr; }
+
+};
+
+/*
+ * @pre    :
+ * @param  :
+ * @post   :
+ * @return :
+ */
+Library::Library() {
+
+  this->root = nullptr;
+
+}
+
+
+
+/*
+ * @pre    :
+ * @param  :
+ * @post   :
+ * @return :
+ */
+
+void Library::add( Book book ) {
+
+  //initialize booknode with Book object
+  BookNode* bnode = new BookNode(book);
+  BookNode* parent_node = nullptr;
+
+  //is this a new tree?
+  if ( this->isEmpty() ) {
+
+    this->root = bnode;
+
+  }
+
+  else {
+
+    BookNode* current_node = this->root;
+
+    //traverse the tree, find the current node's parent
+    while ( current_node ) {
+
+      parent_node = current_node;
+
+      //need the overloaded <,>,= operators here to compare the nodes
+      if ( (*current_node).value < (*bnode).value  ) {
+
+        current_node = (*current_node).right;
+
+      }
+
+      else {
+
+        current_node = (*current_node).left;
+
+      }
+
+    }
+
+    if ( (*bnode).value < (*parent_node).value ) {
+
+      (*parent_node).left = bnode;
+
+    }
+
+    else {
+
+      (*parent_node).right = bnode;
+
+    }
+
+  }
+
+}
+*/
+
+/*
+ * @pre    :
+ * @param  :
+ * @post   :
+ * @return :
+ */
+void Library::checkin( Book book ) {
+
+  //need to be able to find this book in the library, and then change the size at that node
+
+}
+
+/*
+ * @pre    :
+ * @param  :
+ * @post   :
+ * @return :
+ */
+Book Library::*search( Book book ) {
+
+
+
+}
+
+
+#endif //LIBRARY_LIBRARY_H
+
+
+
+
+
+==================================
+
+
+// Define a structure to be used as the tree node
+struct TreeNode
+{
+    int      Key;
+    float    fValue;
+    int      iValue;
+    char     cArray[7];
+    TreeNode *left;
+    TreeNode *right;
+};
+
+class Code202_Tree
+{
+    private:
+        TreeNode *root;
+
+    public:
+        Code202_Tree();
+        ~Code202_Tree();
+        bool isEmpty();
+        TreeNode *SearchTree(int Key);
+        bool Insert(TreeNode *newNode);
+        bool Insert(int Key, float f, int i, char *cA);
+        bool Delete(int Key);
+        void PrintOne(TreeNode *T);
+        void PrintTree();
+    private:
+        void ClearTree(TreeNode *T);
+        TreeNode *DupNode(TreeNode * T);
+        void PrintAll(TreeNode *T);
+};
+
+
+================
+
+
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+#ifndef LIBRARY_LIBRARY_H
+#define LIBRARY_LIBRARY_H
+
+struct Book {
+
+    Book() = delete;
+    Book(string _isbn, string _title, string _author) : isbn(_isbn), title(_title), author(_author) {};
+
+    string isbn;
+    string title;
+    string author;
+
+    bool operator<(const Book &other) { return isbn < other.isbn; };
+    bool operator==(const Book &other) { return isbn == other.isbn; };
+    bool operator!=(const Book &other) { return isbn != other.isbn; };
+
+};
+
+class Library {
+public:
+    Library();
+    void add(Book);
+    void check_in(Book);
+    Book *check_out(Book);
+    Book *search(Book);
+    long available_copies(Book);
+
+private:
+    struct BookNode {
+        Book value;
+        BookNode *left;
+        BookNode *right;
+        size_t count = 1;
+        BookNode(Book b) : value(b), left(nullptr), right(nullptr) {};
+    };
+    BookNode *root;
+    void add(BookNode *&root_node, BookNode *&new_node);
+    BookNode *search(Book, BookNode *root);
+};
+
+#endif //LIBRARY_LIBRARY_H
+
+
+===============
+
+
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+#ifndef LIBRARY_LIBRARY_H
+#define LIBRARY_LIBRARY_H
+
+struct Book {
+
+    Book() = delete;
+    Book(string _isbn, string _title, string _author) : isbn(_isbn), title(_title), author(_author) {};
+
+    string isbn;
+    string title;
+    string author;
+
+    bool operator<(const Book &other) { return isbn < other.isbn; };
+    bool operator==(const Book &other) { return isbn == other.isbn; };
+    bool operator!=(const Book &other) { return isbn != other.isbn; };
+
+};
+
+class Library {
+
+    public:
+
+        //Library BST constructor
+        Library() { root = nullptr; }
+
+        //add a book to the BST
+        void add( Book book ) {
+
+            BookNode temp(book);
+            BookNode *new_node = &temp;
+
+            add(root, new_node);
+
+        }
+
+        //is the tree empty or no
+        bool isEmpty() {
+
+            return (root == nullptr);
+
+        }
+
+        //Whatever this book is, find it and increase it's count
+        void check_in( Book book ) {
+
+            auto temp = search(book, root);
+            (*temp).count++;
+
+        }
+
+        //in order to check out the book, it needs to have available_copies > 0
+        Book *check_out( Book book ) {
+
+            //need to decrement the count
+            if (available_copies(book) > 0) {
+
+                return search(book);
+
+            }
+
+            else {
+
+                cout << "book not available" << endl;
+
+            }
+
+        }
+
+        //look for a particular Book (node) in the Library (BST), return a pointer to it
+        Book *search( Book book ) {
+
+            cout << "DEBUG BEGIN" << endl;
+
+            BookNode temp(book);
+            BookNode *temp_node = &temp;
+
+            cout << "before search BEGIN" << endl;
+
+            temp_node = search(book,root);
+
+            Book return_book = (*temp_node).value;
+            Book* return_pointer = &return_book;
+
+            cout << "DEBUG END" << endl;
+
+            return return_pointer;
+
+        }
+
+        //return the number of copies of a given book.. need to search for the book and access its values
+        long available_copies(Book book) {
+
+            auto temp = search(book, root);
+            return (*temp).count;
+
+        }
+
+    private:
+
+
+        struct BookNode {
+
+            Book value;
+            BookNode *left;
+            BookNode *right;
+            size_t count = 1;
+            BookNode(Book b) : value(b), left(nullptr), right(nullptr) {};
+
+        };
+
+        //root node declaration
+        BookNode *root;
+
+        //private method: add a Book (node) to the Library (BST). This will
+        //do the heavy lifting, whereas the add(Book) will end up calling this function
+        void add(BookNode *&root_node, BookNode *&new_node) {
+
+            //check if empty tree
+            if ( !isEmpty() ) {
+
+
+
+                if ( (*new_node).value < (root_node->value) ) {
+
+                    return add( root_node->left, new_node );
+
+                }
+
+                else if ( (root_node->value) < (*new_node).value ) {
+
+                    return add( root_node->right, new_node );
+
+                }
+
+            }
+
+            //tree is empty
+            else {
+
+                root_node == new_node;
+
+            }
+
+
+        }
+
+        //private method: search for a book. This will do the heavy lifting
+        //whereas the *search(Book) method will end up calling this function
+        BookNode *search( Book book, BookNode *root ) {
+
+            cout << "other search function" << endl;
+
+            //base case= empty tree
+            if ( !isEmpty() ) {
+
+                cout << "hi" << endl;
+
+                //check to see if the book you're searching for is at the root node
+                if ( book.isbn == (*root).value.isbn ) {
+
+                    return root;
+
+                }
+
+                //if it's not the root, then do comparison
+                else {
+
+                    if ( book < (root->value) ) {
+
+                        return search( book, root->left );
+
+                    }
+
+                    else {
+
+                        return search( book, root->right );
+
+                    }
+
+                }
+
+            }
+
+        }
+
+};
+
+#endif //LIBRARY_LIBRARY_H
+
+
+
+==================
+
+
+
+
+
+
+#ifndef Library_H
+#define Library_H
+
+#include <iostream>
+#include <cstdlib>
+#include <new>
+#include <string>
+
+using namespace std;
+
+struct Book {
+
+    string isbn;
+    string title;
+    string author;
+
+    Book() = delete;
+    Book(string _isbn, string _title, string _author) : isbn(_isbn), title(_title), author(_author) {};
+
+    bool operator<(const Book &other) { return isbn < other.isbn; };
+    bool operator==(const Book &other) { return isbn == other.isbn; };
+    bool operator!=(const Book &other) { return isbn != other.isbn; };
+
+};
+
+class Library{
+
+    public:
+
+        Library();
+
+        //Member functions used by client program
+        //Check the difference between public and corresponding private function call
+        //in terms of their signatures
+        void add(Book data){
+
+            add(data, root);
+
+        }
+
+        Book* search(Book data){
+
+            BookNode* temp = search(root,data);
+            Book ret_book = (*temp).value;
+            Book* ptr = &ret_book;
+
+            return ptr;
+
+        }
+
+        long available_copies(Book book) {
+
+            cout << "av copies method" << endl;
+
+            BookNode* temp = search(root, book);
+
+            return (*temp).count;
+
+        }
+
+
+    private:
+
+            struct BookNode {
+
+                Book value;
+                BookNode *left;
+                BookNode *right;
+                size_t count = 1;
+                BookNode(Book b) : value(b), left(nullptr), right(nullptr) {};
+
+            };
+
+            BookNode* root;
+
+            void add(Book data, BookNode* r);
+            BookNode *search(BookNode *rt, Book data);
+
+};
+
+Library::Library() {
+
+    root = NULL;
+
+}
+
+
+void Library::add(Book data, BookNode* rt) {
+
+    try{
+
+        if(rt == NULL){
+
+            root = new BookNode (data);
+
+        }
+
+        else if(data < rt->value){
+
+            add(data, rt->left);
+
+        }
+
+        else if(rt->value < data){
+
+            add(data, rt->right);
+
+        }
+
+    }
+
+    catch(bad_alloc &e) {
+
+        std::cout << "mem allocation exception: " << e.what() << endl;
+        exit(1);
+
+    }
+
+}
+
+
+//private: search data in the Library with rt as root
+Library::BookNode* Library::search(BookNode* rt, Book data){
+
+    if(rt == nullptr) {
+
+        return nullptr;
+
+    }
+
+    else if(rt->value == data) {
+
+        return rt;
+
+    }
+
+    else if ( data < rt->value ) {
+
+        return search(rt->left, data);
+
+    }
+
+    else {
+
+        return search(rt->right, data);
+
+    }
+
+}
+
+
+#endif
+
+
+====================
+
+class Library{
+
+    public:
+
+        Library();
+
+        //Member functions used by client program
+        //Check the difference between public and corresponding private function call
+        //in terms of their signatures
+        void add(Book data){
+
+            add(data, root);
+
+        }
+
+        Book* search(Book data){
+
+            BookNode* temp = search(root,data);
+            Book ret_book = (*temp).value;
+            Book* ptr = &ret_book;
+
+            return ptr;
+
+        }
+
+        long available_copies(Book book) {
+
+            cout << "av copies method" << endl;
+
+            BookNode* temp = search(root, book);
+
+            return (*temp).count;
+
+        }
+
+
+    private:
+
+            struct BookNode {
+
+                Book value;
+                BookNode *left;
+                BookNode *right;
+                size_t count = 1;
+                BookNode(Book b) : value(b), left(nullptr), right(nullptr) {};
+
+            };
+
+            BookNode* root;
+
+            void add(Book data, BookNode* r);
+            BookNode *search(BookNode *rt, Book data);
+
+};
+
+Library::Library() {
+
+    root = NULL;
+
+}
+
+
+void Library::add(Book data, BookNode* rt) {
+
+    try{
+
+        if(rt == NULL){
+
+            root = new BookNode (data);
+
+        }
+
+        else if(data < rt->value){
+
+            add(data, rt->left);
+
+        }
+
+        else if(rt->value < data){
+
+            add(data, rt->right);
+
+        }
+
+    }
+
+    catch(bad_alloc &e) {
+
+        std::cout << "mem allocation exception: " << e.what() << endl;
+        exit(1);
+
+    }
+
+}
+
+
+//private: search data in the Library with rt as root
+Library::BookNode *Library::search(BookNode* rt, Book data){
+
+    if(rt == nullptr) {
+
+        return nullptr;
+
+    }
+
+    else if(rt->value == data) {
+
+        return rt;
+
+    }
+
+    else if ( data < rt->value ) {
+
+        return search(rt->left, data);
+
+    }
+
+    else {
+
+        return search(rt->right, data);
+
+    }
+
+}
+
+
